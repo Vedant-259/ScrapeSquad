@@ -663,27 +663,28 @@ router.post('/', auth, legalScraping, async (req, res) => {
         NODE_ENV: process.env.NODE_ENV
       });
 
-      // Use system Chrome with minimal configuration
-      const executablePath = process.env.CHROME_PATH;
+      // Use installed Chrome with minimal configuration
+      const executablePath = process.env.CHROME_PATH || '/usr/bin/google-chrome';
       console.log('Using Chrome at:', executablePath);
       
       browser = await chromium.launch({
-        headless: true,
+        headless: 'new',
         executablePath,
         timeout: 30000,
         args: [
           '--disable-dev-shm-usage',
           '--no-sandbox',
           '--disable-gpu',
-          '--single-process',
+          '--disable-software-rasterizer',
+          '--disable-extensions',
+          '--disable-default-apps',
+          '--disable-setuid-sandbox',
+          '--no-first-run',
           '--no-zygote',
-          '--disable-features=site-per-process',
-          '--disable-features=AudioServiceOutOfProcess',
-          '--disable-features=IsolateOrigins',
-          '--disable-features=site-per-process',
-          '--disable-features=TranslateUI',
-          '--disable-features=BlinkGenPropertyTrees'
-        ]
+          '--single-process',
+          '--window-size=1920,1080'
+        ],
+        ignoreDefaultArgs: ['--enable-automation']
       });
       console.log('Browser launched successfully');
     } catch (browserError) {
@@ -807,27 +808,28 @@ router.post('/api', legalScraping, async (req, res) => {
         NODE_ENV: process.env.NODE_ENV
       });
 
-      // Use system Chrome with minimal configuration for API route
-      const executablePath = process.env.CHROME_PATH;
+      // Use installed Chrome with minimal configuration for API route
+      const executablePath = process.env.CHROME_PATH || '/usr/bin/google-chrome';
       console.log('API route - Using Chrome at:', executablePath);
       
       browser = await chromium.launch({
-        headless: true,
+        headless: 'new',
         executablePath,
         timeout: 30000,
         args: [
           '--disable-dev-shm-usage',
           '--no-sandbox',
           '--disable-gpu',
-          '--single-process',
+          '--disable-software-rasterizer',
+          '--disable-extensions',
+          '--disable-default-apps',
+          '--disable-setuid-sandbox',
+          '--no-first-run',
           '--no-zygote',
-          '--disable-features=site-per-process',
-          '--disable-features=AudioServiceOutOfProcess',
-          '--disable-features=IsolateOrigins',
-          '--disable-features=site-per-process',
-          '--disable-features=TranslateUI',
-          '--disable-features=BlinkGenPropertyTrees'
-        ]
+          '--single-process',
+          '--window-size=1920,1080'
+        ],
+        ignoreDefaultArgs: ['--enable-automation']
       });
       console.log('Browser launched successfully for API route');
     } catch (browserError) {
