@@ -14,10 +14,15 @@ app.set('trust proxy', 1);
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? process.env.CLIENT_URL
+    ? [process.env.CLIENT_URL, process.env.FRONTEND_URL]
     : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174'],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization']
 }));
+
+// Handle OPTIONS requests explicitly
+app.options('*', cors());
 
 app.use(express.json());
 
@@ -29,7 +34,7 @@ app.use(helmet({
       imgSrc: ["'self'", "data:", "blob:", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173'],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      connectSrc: ["'self'", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173', 'https://scrapesquad-production.up.railway.app'],
+      connectSrc: ["'self'", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173', process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : null].filter(Boolean),
       frameSrc: ["'self'", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173']
     }
   },
