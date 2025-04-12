@@ -13,9 +13,7 @@ app.set('trust proxy', 1);
 
 // Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.CLIENT_URL].filter(Boolean)
-    : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174'],
+  origin: true,
   credentials: true
 }));
 
@@ -26,13 +24,15 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "blob:", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : "http://localhost:5000"],
+      imgSrc: ["'self'", "data:", "blob:", "*"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      connectSrc: ["'self'", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : "http://localhost:5000"]
+      connectSrc: ["'self'", "*"],
+      frameSrc: ["'self'", "*"]
     }
   },
-  crossOriginResourcePolicy: { policy: "cross-origin" }
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginEmbedderPolicy: false
 }));
 
 // Rate limiting
