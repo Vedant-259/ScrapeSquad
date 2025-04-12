@@ -8,8 +8,8 @@
     "dev": "nodemon server.js",
     "client": "cd client && npm run dev",
     "dev:full": "concurrently \"npm run dev\" \"npm run client\"",
-    "install-client": "cd client && npm install",
-    "build-client": "cd client && npm install && npx vite build",
+    "install-client": "cd client && npm install --include=dev",
+    "build-client": "npm run install-client && cd client && npm run build",
     "install-playwright": "npx playwright install chromium",
     "build": "npm install && npm run install-playwright && npm run build-client"
   },
