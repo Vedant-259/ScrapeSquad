@@ -9,8 +9,8 @@ export default defineConfig(({ mode }) => ({
     proxy: {
       '/api': {
         target: mode === 'production' 
-          ? 'https://scrapesquad-production.up.railway.app'
-          : 'http://localhost:5000',
+          ? process.env.CLIENT_URL
+          : `http://localhost:${process.env.PORT || 5000}`,
         changeOrigin: true,
       },
     },

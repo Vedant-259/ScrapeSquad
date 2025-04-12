@@ -13,7 +13,9 @@ app.set('trust proxy', 1);
 
 // Middleware
 app.use(cors({
-  origin: true,
+  origin: process.env.NODE_ENV === 'production'
+    ? process.env.CLIENT_URL
+    : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174'],
   credentials: true
 }));
 
@@ -24,11 +26,11 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "blob:", "*"],
+      imgSrc: ["'self'", "data:", "blob:", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173'],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      connectSrc: ["'self'", "*"],
-      frameSrc: ["'self'", "*"]
+      connectSrc: ["'self'", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173'],
+      frameSrc: ["'self'", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173']
     }
   },
   crossOriginResourcePolicy: { policy: "cross-origin" },
