@@ -3,25 +3,23 @@ services:
     name: ScrapeSquad
     env: node
     buildCommand: |
-      # Minimal system dependencies for Playwright
+      # Install Chromium browser
       apt-get update && \
-      apt-get install -y \
-        libglib2.0-0 \
-        libnss3 \
-        libatk1.0-0 \
-        libatk-bridge2.0-0 \
-        libx11-xcb1 \
-        libxcb1 \
-        libxcomposite1 \
-        libxcursor1 \
-        libxdamage1 \
-        libxext6 \
-        libxfixes3 \
-        libxi6 \
-        libxrandr2 \
-        libxrender1 \
-        libxss1 \
-        libxtst6
+      apt-get install -y chromium-browser
+      
+      # Set environment variable for Chromium path
+      export CHROME_PATH=$(which chromium-browser)
+      echo "Chrome path: $CHROME_PATH"
+      
+      # Install Node dependencies
+      npm install
+      
+      # Skip Playwright browser download since we're using system Chrome
+      export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+      
+      # Build client
+      cd client && npm install
+      cd client && npm run build
 
       # Install Node dependencies
       npm install

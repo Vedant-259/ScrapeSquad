@@ -663,21 +663,27 @@ router.post('/', auth, legalScraping, async (req, res) => {
         NODE_ENV: process.env.NODE_ENV
       });
 
-      // Enhanced browser launch configuration
+      // Use system Chrome with minimal configuration
+      const executablePath = process.env.CHROME_PATH;
+      console.log('Using Chrome at:', executablePath);
+      
       browser = await chromium.launch({
         headless: true,
-        timeout: 60000, // Reduced timeout for free plan
+        executablePath,
+        timeout: 30000,
         args: [
           '--disable-dev-shm-usage',
-          '--disable-setuid-sandbox',
           '--no-sandbox',
           '--disable-gpu',
-          '--disable-extensions',
-          '--disable-software-rasterizer',
-          '--disable-features=site-per-process', // Reduces memory usage
-          '--js-flags="--max-old-space-size=460"' // Limit memory for V8
-        ],
-        chromiumSandbox: false
+          '--single-process',
+          '--no-zygote',
+          '--disable-features=site-per-process',
+          '--disable-features=AudioServiceOutOfProcess',
+          '--disable-features=IsolateOrigins',
+          '--disable-features=site-per-process',
+          '--disable-features=TranslateUI',
+          '--disable-features=BlinkGenPropertyTrees'
+        ]
       });
       console.log('Browser launched successfully');
     } catch (browserError) {
@@ -801,21 +807,27 @@ router.post('/api', legalScraping, async (req, res) => {
         NODE_ENV: process.env.NODE_ENV
       });
 
-      // Enhanced browser launch configuration for API route
+      // Use system Chrome with minimal configuration for API route
+      const executablePath = process.env.CHROME_PATH;
+      console.log('API route - Using Chrome at:', executablePath);
+      
       browser = await chromium.launch({
         headless: true,
-        timeout: 60000, // Reduced timeout for free plan
+        executablePath,
+        timeout: 30000,
         args: [
           '--disable-dev-shm-usage',
-          '--disable-setuid-sandbox',
           '--no-sandbox',
           '--disable-gpu',
-          '--disable-extensions',
-          '--disable-software-rasterizer',
-          '--disable-features=site-per-process', // Reduces memory usage
-          '--js-flags="--max-old-space-size=460"' // Limit memory for V8
-        ],
-        chromiumSandbox: false
+          '--single-process',
+          '--no-zygote',
+          '--disable-features=site-per-process',
+          '--disable-features=AudioServiceOutOfProcess',
+          '--disable-features=IsolateOrigins',
+          '--disable-features=site-per-process',
+          '--disable-features=TranslateUI',
+          '--disable-features=BlinkGenPropertyTrees'
+        ]
       });
       console.log('Browser launched successfully for API route');
     } catch (browserError) {
