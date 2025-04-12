@@ -630,6 +630,7 @@ const scrapePage = async (page, url, options = {}) => {
 router.post('/', auth, legalScraping, async (req, res) => {
   let browser;
   try {
+    console.log('Starting scrape request');
     const {
       url,
       handleInfiniteScroll = false,
@@ -650,16 +651,57 @@ router.post('/', auth, legalScraping, async (req, res) => {
       return res.status(400).json({ message: 'Invalid URL format' });
     }
 
-    browser = await chromium.launch({
-      headless: true,
-      timeout: 120000,
-      args: [
-        '--disable-dev-shm-usage',
-        '--disable-setuid-sandbox',
-        '--no-sandbox',
-        '--disable-gpu'
-      ]
-    });
+    console.log('Launching browser');
+    console.log('Playwright browsers path:', process.env.PLAYWRIGHT_BROWSERS_PATH);
+    
+    try {
+      // Log environment information
+      console.log('Current working directory:', process.cwd());
+      console.log('Environment variables:', {
+        PLAYWRIGHT_BROWSERS_PATH: process.env.PLAYWRIGHT_BROWSERS_PATH,
+        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD,
+        NODE_ENV: process.env.NODE_ENV
+      });
+
+      // Enhanced browser launch configuration
+      browser = await chromium.launch({
+        headless: true,
+        timeout: 180000, // Increased timeout
+        args: [
+          '--disable-dev-shm-usage',
+          '--disable-setuid-sandbox',
+          '--no-sandbox',
+          '--disable-gpu',
+          '--no-zygote',
+          '--single-process',
+          '--disable-extensions'
+        ],
+        executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
+        chromiumSandbox: false
+      });
+      console.log('Browser launched successfully');
+    } catch (browserError) {
+      console.error('Detailed browser launch error:', {
+        message: browserError.message,
+        stack: browserError.stack,
+        name: browserError.name,
+        code: browserError.code,
+        command: browserError.command,
+        spawnargs: browserError.spawnargs,
+        details: browserError.details
+      });
+      return res.status(500).json({ 
+        message: 'Error launching browser',
+        error: browserError.message,
+        details: {
+          name: browserError.name,
+          code: browserError.code,
+          command: browserError.command,
+          spawnargs: browserError.spawnargs,
+          details: browserError.details
+        }
+      });
+    }
     
     const context = await browser.newContext({
       userAgent: 'YourAppName Bot/1.0 (+https://yourapp.com/bot; bot@yourapp.com)',
@@ -747,16 +789,57 @@ router.post('/api', legalScraping, async (req, res) => {
     }
 
     // Proceed with scraping (same logic as above)
-    browser = await chromium.launch({
-      headless: true,
-      timeout: 120000,
-      args: [
-        '--disable-dev-shm-usage',
-        '--disable-setuid-sandbox',
-        '--no-sandbox',
-        '--disable-gpu'
-      ]
-    });
+    console.log('Launching browser for API route');
+    console.log('Playwright browsers path:', process.env.PLAYWRIGHT_BROWSERS_PATH);
+    
+    try {
+      // Log environment information for API route
+      console.log('API route - Current working directory:', process.cwd());
+      console.log('API route - Environment variables:', {
+        PLAYWRIGHT_BROWSERS_PATH: process.env.PLAYWRIGHT_BROWSERS_PATH,
+        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD,
+        NODE_ENV: process.env.NODE_ENV
+      });
+
+      // Enhanced browser launch configuration for API route
+      browser = await chromium.launch({
+        headless: true,
+        timeout: 180000, // Increased timeout
+        args: [
+          '--disable-dev-shm-usage',
+          '--disable-setuid-sandbox',
+          '--no-sandbox',
+          '--disable-gpu',
+          '--no-zygote',
+          '--single-process',
+          '--disable-extensions'
+        ],
+        executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
+        chromiumSandbox: false
+      });
+      console.log('Browser launched successfully for API route');
+    } catch (browserError) {
+      console.error('Detailed browser launch error in API route:', {
+        message: browserError.message,
+        stack: browserError.stack,
+        name: browserError.name,
+        code: browserError.code,
+        command: browserError.command,
+        spawnargs: browserError.spawnargs,
+        details: browserError.details
+      });
+      return res.status(500).json({ 
+        message: 'Error launching browser',
+        error: browserError.message,
+        details: {
+          name: browserError.name,
+          code: browserError.code,
+          command: browserError.command,
+          spawnargs: browserError.spawnargs,
+          details: browserError.details
+        }
+      });
+    }
     
     const context = await browser.newContext({
       userAgent: 'YourAppName Bot/1.0 (+https://yourapp.com/bot; bot@yourapp.com)',
