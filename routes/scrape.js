@@ -666,17 +666,17 @@ router.post('/', auth, legalScraping, async (req, res) => {
       // Enhanced browser launch configuration
       browser = await chromium.launch({
         headless: true,
-        timeout: 180000, // Increased timeout
+        timeout: 60000, // Reduced timeout for free plan
         args: [
           '--disable-dev-shm-usage',
           '--disable-setuid-sandbox',
           '--no-sandbox',
           '--disable-gpu',
-          '--no-zygote',
-          '--single-process',
-          '--disable-extensions'
+          '--disable-extensions',
+          '--disable-software-rasterizer',
+          '--disable-features=site-per-process', // Reduces memory usage
+          '--js-flags="--max-old-space-size=460"' // Limit memory for V8
         ],
-        executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
         chromiumSandbox: false
       });
       console.log('Browser launched successfully');
@@ -804,17 +804,17 @@ router.post('/api', legalScraping, async (req, res) => {
       // Enhanced browser launch configuration for API route
       browser = await chromium.launch({
         headless: true,
-        timeout: 180000, // Increased timeout
+        timeout: 60000, // Reduced timeout for free plan
         args: [
           '--disable-dev-shm-usage',
           '--disable-setuid-sandbox',
           '--no-sandbox',
           '--disable-gpu',
-          '--no-zygote',
-          '--single-process',
-          '--disable-extensions'
+          '--disable-extensions',
+          '--disable-software-rasterizer',
+          '--disable-features=site-per-process', // Reduces memory usage
+          '--js-flags="--max-old-space-size=460"' // Limit memory for V8
         ],
-        executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
         chromiumSandbox: false
       });
       console.log('Browser launched successfully for API route');
