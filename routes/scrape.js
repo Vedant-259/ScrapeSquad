@@ -668,7 +668,7 @@ router.post('/', auth, legalScraping, async (req, res) => {
       console.log('Using Chrome at:', executablePath);
       
       browser = await chromium.launch({
-        headless: 'new',
+        headless: true,
         executablePath,
         timeout: 30000,
         args: [
@@ -813,7 +813,7 @@ router.post('/api', legalScraping, async (req, res) => {
       console.log('API route - Using Chrome at:', executablePath);
       
       browser = await chromium.launch({
-        headless: 'new',
+        headless: true,
         executablePath,
         timeout: 30000,
         args: [
