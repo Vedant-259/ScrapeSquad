@@ -29,7 +29,7 @@ app.use(helmet({
       imgSrc: ["'self'", "data:", "blob:", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173'],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      connectSrc: ["'self'", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173'],
+      connectSrc: ["'self'", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173', 'https://scrapesquad-production.up.railway.app'],
       frameSrc: ["'self'", process.env.NODE_ENV === 'production' ? process.env.CLIENT_URL : 'http://localhost:5173']
     }
   },
