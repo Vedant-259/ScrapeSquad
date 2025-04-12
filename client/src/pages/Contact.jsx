@@ -40,7 +40,7 @@ const Contact = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/contact', formData);
+      await axios.post('/api/contact', formData);
       toast({
         title: 'Request sent successfully!',
         description: 'We will review your API access request and get back to you soon.',
@@ -175,4 +175,4 @@ const Contact = () => {
   );
 };
 
-export default Contact; 
+export default Contact;

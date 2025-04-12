@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-// Set the base URL for axios
-axios.defaults.baseURL = 'http://localhost:5000';
+// Set the base URL for axios based on environment
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 const AuthContext = createContext(null);
 
@@ -132,4 +132,4 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}; 
+};

@@ -81,8 +81,8 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:5000/api/scrape',
-        { 
+        '/api/scrape',
+        {
           url,
           handleInfiniteScroll: true,
           maxScrolls: 3,
@@ -1100,4 +1100,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;
