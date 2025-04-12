@@ -652,7 +652,13 @@ router.post('/', auth, legalScraping, async (req, res) => {
 
     browser = await chromium.launch({
       headless: true,
-      timeout: 120000
+      timeout: 120000,
+      args: [
+        '--disable-dev-shm-usage',
+        '--disable-setuid-sandbox',
+        '--no-sandbox',
+        '--disable-gpu'
+      ]
     });
     
     const context = await browser.newContext({
@@ -743,7 +749,13 @@ router.post('/api', legalScraping, async (req, res) => {
     // Proceed with scraping (same logic as above)
     browser = await chromium.launch({
       headless: true,
-      timeout: 120000
+      timeout: 120000,
+      args: [
+        '--disable-dev-shm-usage',
+        '--disable-setuid-sandbox',
+        '--no-sandbox',
+        '--disable-gpu'
+      ]
     });
     
     const context = await browser.newContext({
@@ -800,4 +812,4 @@ router.post('/api', legalScraping, async (req, res) => {
   }
 });
 
-module.exports = router; 
+module.exports = router;

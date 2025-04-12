@@ -11,7 +11,7 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? process.env.CLIENT_URL 
+    ? ['https://scrapesquad.onrender.com', process.env.CLIENT_URL].filter(Boolean)
     : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174'],
   credentials: true
 }));
@@ -23,10 +23,10 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "blob:", "http://localhost:5000"],
+      imgSrc: ["'self'", "data:", "blob:", process.env.NODE_ENV === 'production' ? "https://scrapesquad.onrender.com" : "http://localhost:5000"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      connectSrc: ["'self'", "http://localhost:5000"]
+      connectSrc: ["'self'", process.env.NODE_ENV === 'production' ? "https://scrapesquad.onrender.com" : "http://localhost:5000"]
     }
   },
   crossOriginResourcePolicy: { policy: "cross-origin" }
