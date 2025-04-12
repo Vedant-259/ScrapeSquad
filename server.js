@@ -61,9 +61,9 @@ app.use('/api/contact', require('./routes/contact'));
 
 // Serve static files from the React app in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'client/build')));
+  app.use(express.static(path.join(__dirname, 'client/dist')));
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'client/dist', 'index.html'));
   });
 }
 
@@ -75,4 +75,4 @@ mongoose.connect(process.env.MONGODB_URI)
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-}); 
+});
